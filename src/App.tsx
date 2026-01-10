@@ -18,14 +18,24 @@ function App(): JSX.Element {
     fetchWordOfTheDay();
   }, []);
 
+  const getDate = (): string => {
+    const paramsString = window.location.search;
+    const searchParams = new URLSearchParams(paramsString);
+    const queryDate = searchParams.get("debugDate");
+
+    if (queryDate !== null) return queryDate;
+
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  };
+
   const fetchWordOfTheDay = async (): Promise<void> => {
     try {
       setLoading(true);
       setError(null);
 
       // Get today's date in YYYY-MM-DD format
-      const today = new Date();
-      const dateString = today.toISOString().split("T")[0];
+      const dateString = getDate();
 
       const url = `https://api.datasets.crow.nl/queries/redmer-kronemeijer/thesaurus-wordle/run?today=${dateString}`;
 
