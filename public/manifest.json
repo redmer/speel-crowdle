@@ -1,7 +1,7 @@
 {
   "name": "CROWdle",
   "short_name": "CROWdle",
-  "description": "Raad dagelijks het woord uit de CROW-thesaurus – binnen zes pogingen",
+  "description": "Raad dagelijks het CROW-begrip van de dag – binnen zes pogingen",
   "start_url": "/speel-crowdle/",
   "scope": "/speel-crowdle/",
   "display": "standalone",

@@ -1,5 +1,7 @@
 # Speel CROWdle
 
+> _Raad dagelijks het CROW-begrip van de dag – binnen zes pogingen._
+
 - [**Speel nu CROWdle**](https://rdmr.eu/speel-crowdle/)
 - [Doorblader de CROW-Thesaurus](https://begrippen.crow.nl/)
 
@@ -12,7 +14,7 @@
    Een **GELE** letter staat niet op de juiste plek, maar komt wel in het woord voor.
    Een **GRIJZE** letter komt niet in het woord voor.
 1. Als je het woord na 6 pogingen nog niet hebt geraden, krijg je een hint en nog één kans.
-1. Als je het woord hebt geraden – of je hebt verloren – krijg je de definitie van het begrip te zien, plus een link naar de term in op CROW-begrippen.
+1. Als je het woord hebt geraden – of je hebt verloren – krijg je de definitie van het begrip te zien, plus een link naar de term in op CROW-Begrippen.
 
 Veel speel- en leerplezier.
 
