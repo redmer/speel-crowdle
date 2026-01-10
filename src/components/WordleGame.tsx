@@ -1,25 +1,39 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import "../styles/WordleGame.css";
 
-export default function WordleGame({ wordData }) {
-  const [guesses, setGuesses] = useState([]);
-  const [currentGuess, setCurrentGuess] = useState("");
-  const [won, setWon] = useState(false);
-  const [message, setMessage] = useState("");
-  const [letterStates, setLetterStates] = useState({});
+interface WordData {
+  id: string;
+  label: string;
+  definition: string;
+  strlen: string;
+}
+
+interface WordleGameProps {
+  wordData: WordData;
+}
+
+type LetterState = "correct" | "present" | "absent";
+type LetterStates = Record<string, LetterState>;
+
+const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
+  const [guesses, setGuesses] = useState<string[]>([]);
+  const [currentGuess, setCurrentGuess] = useState<string>("");
+  const [won, setWon] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+  const [letterStates, setLetterStates] = useState<LetterStates>({});
 
   const word = wordData.label.toLowerCase();
   const maxGuesses = 6;
 
   useEffect(() => {
-    const handleKeyPress = (e) => {
+    const handleKeyPress = (e: KeyboardEvent): void => {
       if (won) return;
 
       if (e.key === "Enter") {
         handleSubmitGuess();
       } else if (e.key === "Backspace") {
         setCurrentGuess((prev) => prev.slice(0, -1));
-      } else if (/^[a-z]$/i.test(e.key)) {
+      } else if (/^[a-zñ]$/i.test(e.key)) {
         if (currentGuess.length < word.length) {
           setCurrentGuess((prev) => prev + e.key.toLowerCase());
         }
@@ -30,22 +44,22 @@ export default function WordleGame({ wordData }) {
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [currentGuess, won, word]);
 
-  const getLetterState = (letter, guessWord) => {
+  const getLetterState = (letter: string, guessWord: string): LetterState => {
     // Correct position
     if (word[guessWord.indexOf(letter)] === letter) {
       return "correct";
     }
 
-    // Not in word
-    if (!word.includes(letter)) {
-      return "absent";
+    // Wrong position
+    if (word.includes(letter)) {
+      return "present";
     }
 
-    // Wrong position
-    return `present-${index}`;
+    // Not in word
+    return "absent";
   };
 
-  const handleSubmitGuess = () => {
+  const handleSubmitGuess = (): void => {
     if (currentGuess.length !== word.length) {
       setMessage("Word must be " + word.length + " letters");
       setTimeout(() => setMessage(""), 2000);
@@ -57,7 +71,7 @@ export default function WordleGame({ wordData }) {
     setGuesses(newGuesses);
 
     // Update letter states
-    const newLetterStates = { ...letterStates };
+    const newLetterStates: LetterStates = { ...letterStates };
     for (let i = 0; i < newGuess.length; i++) {
       const letter = newGuess[i];
       if (word[i] === letter) {
@@ -155,4 +169,6 @@ export default function WordleGame({ wordData }) {
       </div>
     </div>
   );
-}
+};
+
+export default WordleGame;

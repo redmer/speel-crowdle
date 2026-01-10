@@ -1,17 +1,24 @@
+interface WordData {
+  id: string;
+  label: string;
+  definition: string;
+  strlen: string;
+}
+
 import { useEffect, useState } from "react";
-// import './App.css'
+// import "./App.css";
 import WordleGame from "./components/WordleGame";
 
-function App() {
-  const [wordData, setWordData] = useState(null);
+function App(): JSX.Element {
+  const [wordData, setWordData] = useState<WordData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchWordOfTheDay();
   }, []);
 
-  const fetchWordOfTheDay = async () => {
+  const fetchWordOfTheDay = async (): Promise<void> => {
     try {
       setLoading(true);
       setError(null);
@@ -24,7 +31,7 @@ function App() {
 
       const response = await fetch(url, {
         headers: {
-          //   'User-Agent': 'ThesaurusWordle/1.0'
+          //   "User-Agent": "ThesaurusWordle/1.0",
         },
       });
 
@@ -32,10 +39,11 @@ function App() {
         throw new Error(`API error: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data: WordData = await response.json();
       setWordData(data);
     } catch (err) {
-      setError(err.message);
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      setError(errorMessage);
       console.error("Failed to fetch word:", err);
     } finally {
       setLoading(false);
