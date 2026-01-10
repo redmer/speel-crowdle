@@ -44,18 +44,53 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [currentGuess, won, word]);
 
-  const getLetterState = (letter: string, guessWord: string): LetterState => {
+  const getLetterState = (
+    letter: string,
+    position: number,
+    guessWord: string
+  ): LetterState => {
     // Correct position
-    if (word[guessWord.indexOf(letter)] === letter) {
+    if (word[position] === letter) {
       return "correct";
     }
 
-    // Wrong position
-    if (word.includes(letter)) {
+    // Count available instances of this letter in the word
+    let wordLetterCount = 0;
+    for (let i = 0; i < word.length; i++) {
+      if (word[i] === letter) {
+        wordLetterCount++;
+      }
+    }
+
+    // Count how many instances of this letter are already matched as "correct"
+    let correctMatches = 0;
+    for (let i = 0; i < guessWord.length; i++) {
+      if (guessWord[i] === letter && word[i] === letter) {
+        correctMatches++;
+      }
+    }
+
+    // Count how many instances we've already marked as "present" before this position
+    let presentMatches = 0;
+    for (let i = 0; i < position; i++) {
+      if (
+        guessWord[i] === letter &&
+        word[i] !== letter &&
+        word.includes(letter)
+      ) {
+        presentMatches++;
+      }
+    }
+
+    // If there are available instances (not used by correct or previous present matches), mark as present
+    if (
+      word.includes(letter) &&
+      correctMatches + presentMatches < wordLetterCount
+    ) {
       return "present";
     }
 
-    // Not in word
+    // Not in word or all instances are already used
     return "absent";
   };
 
@@ -74,14 +109,12 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
     const newLetterStates: LetterStates = { ...letterStates };
     for (let i = 0; i < newGuess.length; i++) {
       const letter = newGuess[i];
-      if (word[i] === letter) {
+      const state = getLetterState(letter, i, newGuess);
+      if (state === "correct") {
         newLetterStates[letter] = "correct";
-      } else if (
-        word.includes(letter) &&
-        newLetterStates[letter] !== "correct"
-      ) {
+      } else if (state === "present" && newLetterStates[letter] !== "correct") {
         newLetterStates[letter] = "present";
-      } else if (!newLetterStates[letter]) {
+      } else if (state === "absent" && !newLetterStates[letter]) {
         newLetterStates[letter] = "absent";
       }
     }
@@ -108,7 +141,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
                 guesses[i]?.[j] ||
                 (i === guesses.length ? currentGuess[j] : "");
               const state = guesses[i]
-                ? getLetterState(guesses[i][j], guesses[i])
+                ? getLetterState(guesses[i][j], j, guesses[i])
                 : "";
 
               return (
