@@ -108,6 +108,22 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
     return "absent";
   };
 
+  const handleLetterClick = (letter: string): void => {
+    if (won) return;
+    if (currentGuess.length < word.length) {
+      const newGuess = currentGuess + letter.toLowerCase();
+      const transformed = transformToLigature(newGuess);
+      if (transformed.length <= word.length) {
+        setCurrentGuess(transformed);
+      }
+    }
+  };
+
+  const handleBackspaceClick = (): void => {
+    if (won) return;
+    setCurrentGuess((prev) => prev.slice(0, -1));
+  };
+
   const handleSubmitGuess = (): void => {
     if (currentGuess.length !== word.length) {
       setMessage(`Woord moet ${word.length} letters lang zijn`);
@@ -201,7 +217,8 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
         ></p>
       )}
 
-      {!won && (
+      {/* Remove the input, as it's redundant with the virtual keyboard. */}
+      {/* {!won && (
         <div className="input-section">
           <input
             type="text"
@@ -211,7 +228,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
           />
           <button onClick={handleSubmitGuess}>Raad</button>
         </div>
-      )}
+      )} */}
 
       {won && (
         <div className="result">
@@ -230,16 +247,64 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
         </div>
       )}
 
-      <div className="keyboard">
-        <h3>Geraden letters:</h3>
-        <div className="letter-grid">
-          {Object.entries(letterStates).map(([letter, state]) => (
-            <span key={letter} className={`letter-indicator ${state}`}>
-              {letter.toUpperCase()}
-            </span>
-          ))}
+      {!won && (
+        <div className="virtual-keyboard">
+          <div className="keyboard-row">
+            {["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"].map(
+              (letter) => (
+                <button
+                  key={letter}
+                  className={`key ${letterStates[letter.toLowerCase()] || ""}`}
+                  onClick={() => handleLetterClick(letter)}
+                  disabled={won}
+                >
+                  {letter}
+                </button>
+              )
+            )}
+          </div>
+          <div className="keyboard-row">
+            <div className="half-key" />
+            {["A", "S", "D", "F", "G", "H", "J", "K", "L"].map((letter) => (
+              <button
+                key={letter}
+                className={`key ${letterStates[letter.toLowerCase()] || ""}`}
+                onClick={() => handleLetterClick(letter)}
+                disabled={won}
+              >
+                {letter}
+              </button>
+            ))}
+            <div className="half-key" />
+          </div>
+          <div className="keyboard-row">
+            <button
+              className="key special enter"
+              onClick={handleSubmitGuess}
+              disabled={won}
+            >
+              ⏎
+            </button>
+            {["Z", "X", "C", "V", "B", "N", "M"].map((letter) => (
+              <button
+                key={letter}
+                className={`key ${letterStates[letter.toLowerCase()] || ""}`}
+                onClick={() => handleLetterClick(letter)}
+                disabled={won}
+              >
+                {letter}
+              </button>
+            ))}
+            <button
+              className="key special backspace"
+              onClick={handleBackspaceClick}
+              disabled={won}
+            >
+              ⌫
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
