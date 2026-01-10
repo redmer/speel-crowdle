@@ -55,9 +55,7 @@ function App(): JSX.Element {
   };
 
   const appTitle = `CROWdle`;
-  const appDesc = `Raad dagelijks het woord uit de CROW-thesaurus – binnen ${
-    wordData ? (parseInt(wordData.answer_len, 10) >= 7 ? "7" : "6") : "6"
-  } pogingen.`;
+  const appDesc = `Raad dagelijks het CROW-begrip van de dag – binnen zes pogingen.`;
 
   if (loading) {
     return (

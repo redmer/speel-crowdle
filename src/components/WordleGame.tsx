@@ -4,8 +4,9 @@ import "../styles/WordleGame.css";
 export interface WordData {
   term_id: string;
   answer: string;
-  definition: string;
+  definition?: string;
   answer_len: string;
+  answer_hint?: string;
 }
 
 interface WordleGameProps {
@@ -16,17 +17,17 @@ type LetterState = "correct" | "present" | "absent";
 type LetterStates = Record<string, LetterState>;
 
 const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
+  const INITIAL_GUESSES = 6;
+  const TRUE_MAX_GUESSES = 7;
+
   const [guesses, setGuesses] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState<string>("");
   const [won, setWon] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [letterStates, setLetterStates] = useState<LetterStates>({});
+  const [currentMaxGuesses, setMaxGuesses] = useState<number>(INITIAL_GUESSES);
 
   const word = wordData.answer.toLowerCase();
-  let maxGuesses = 6;
-  if (parseInt(wordData.answer_len, 10) >= 7) {
-    maxGuesses = 7;
-  }
 
   const transformToLigature = (input: string): string => {
     // Replace consecutive i+j with the IJ ligature
@@ -143,10 +144,19 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
         setWon(true);
         setMessage("🎉 Gewonnen!");
       }, totalAnimationTime);
-    } else if (newGuesses.length >= maxGuesses) {
+    } else if (newGuesses.length >= TRUE_MAX_GUESSES) {
       setTimeout(() => {
         setWon(true);
         setMessage(`Game Over! Het woord was: ${word}`);
+      }, totalAnimationTime);
+    } else if (newGuesses.length >= INITIAL_GUESSES) {
+      setTimeout(() => {
+        setMessage(
+          `Ai, dat was je laatste kans! Goed, nog één poging dan… 
+          ${wordData.answer_hint ? "hint: " + wordData.answer_hint + "." : ""}
+          `
+        );
+        setMaxGuesses(TRUE_MAX_GUESSES);
       }, totalAnimationTime);
     }
 
@@ -156,7 +166,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
   return (
     <div className="wordle-container">
       <div className="guesses">
-        {Array.from({ length: maxGuesses }).map((_, i) => (
+        {Array.from({ length: currentMaxGuesses }).map((_, i) => (
           <div key={i} className="guess-row">
             {Array.from({ length: word.length }).map((_, j) => {
               const letter =
@@ -184,7 +194,12 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
         ))}
       </div>
 
-      {message && <p className="message">{message}</p>}
+      {message && (
+        <p
+          className="message"
+          dangerouslySetInnerHTML={{ __html: message }}
+        ></p>
+      )}
 
       {!won && (
         <div className="input-section">
@@ -210,7 +225,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
             rel="noopener noreferrer"
             className="thesaurus-link"
           >
-            Toon in CROW-Thesaurus →
+            Toon in CROW-Begrippen →
           </a>
         </div>
       )}
