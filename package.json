@@ -1,7 +1,7 @@
 {
-  "name": "thesaurus-wordle",
+  "name": "speel-crowdle",
   "version": "1.0.0",
-  "description": "A Wordle game using Dutch words from CROW thesaurus",
+  "description": "A word guessing game using Dutch words from CROW thesaurus",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -61,7 +61,7 @@ function App(): JSX.Element {
     }
   };
 
-  const appTitle = `CROWordle`;
+  const appTitle = `CROWdle`;
   const appDesc = `Raad dagelijks het woord uit de CROW-thesaurus – binnen zes pogingen.`;
 
   if (loading) {
