@@ -1,3 +1,9 @@
+:root {
+  --crow-color-resolution-blue: #2e3b6a;
+  --crow-color-vivid-cerulean: #009adc;
+  --crow-color-beer: #f7931e;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -5,31 +11,34 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: system-ui, ui-sans-serif, sans-serif;
+  background: linear-gradient(
+    135deg,
+    var(--crow-color-vivid-cerulean) 0%,
+    var(--crow-color-resolution-blue) 100%
+  );
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
 }
 
 #root {
   width: 100%;
+  padding: 1em 0 5em;
 }
 
 .container {
-  max-width: 500px;
+  max-width: 600px;
   width: 100%;
   text-align: center;
+  margin: 0 auto;
 }
 
 h1 {
   color: white;
   margin-bottom: 30px;
   font-size: 2.5rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .error {
@@ -42,7 +51,7 @@ h1 {
 }
 
 button {
-  background: #667eea;
+  background: var(--crow-color-vivid-cerulean);
   color: white;
   border: none;
   padding: 12px 24px;
@@ -55,9 +64,9 @@ button {
 }
 
 button:hover {
-  background: #764ba2;
+  background: var(--crow-color-resolution-blue);
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); */
 }
 
 p {

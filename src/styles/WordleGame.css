@@ -17,6 +17,11 @@
   grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
   gap: 8px;
   justify-content: center;
+
+  display: flex;
+  gap: 8px;
+  justify-content: space-around;
+  flex-wrap: nowrap;
 }
 
 .letter-box {
@@ -61,7 +66,7 @@
 }
 
 .message {
-  color: #667eea;
+  color: var(--crow-color-beer);
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 15px;
@@ -84,11 +89,12 @@
   gap: 10px;
   margin-bottom: 20px;
   justify-content: center;
+  align-items: baseline;
 }
 
 .input-section input {
   flex: 1;
-  max-width: 200px;
+  /* max-width: 200px; */
   padding: 12px 16px;
   font-size: 1rem;
   border: 2px solid #e0e0e0;
@@ -107,10 +113,10 @@
 
 .input-section button {
   padding: 12px 24px;
-  background: #667eea;
+  background: var(--crow-color-vivid-cerulean);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 20em;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -118,7 +124,7 @@
 }
 
 .input-section button:hover {
-  background: #764ba2;
+  background: var(--crow-color-resolution-blue);
   transform: translateY(-2px);
 }
 
@@ -186,7 +192,7 @@
 
 .letter-grid {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 6px;
   justify-content: center;
 }
