@@ -67,8 +67,10 @@ function App(): JSX.Element {
   if (loading) {
     return (
       <div className="container">
-        <h1>{appTitle}</h1>
-        <p>{appDesc}</p>
+        <header>
+          <h1>{appTitle}</h1>
+          <p>{appDesc}</p>
+        </header>
         <p>Woord van de dag laden...</p>
       </div>
     );
@@ -77,8 +79,10 @@ function App(): JSX.Element {
   if (error) {
     return (
       <div className="container">
-        <h1>{appTitle}</h1>
-        <p>{appDesc}</p>
+        <header>
+          <h1>{appTitle}</h1>
+          <p>{appDesc}</p>
+        </header>
         <p className="error">Fout: {error}</p>
         <button onClick={fetchWordOfTheDay}>Probeer opnieuw</button>
       </div>
@@ -87,8 +91,10 @@ function App(): JSX.Element {
 
   return (
     <div className="container">
-      <h1>{appTitle}</h1>
-      <p>{appDesc}</p>
+      <header>
+        <h1>{appTitle}</h1>
+        <p>{appDesc}</p>
+      </header>
       {wordData && <WordleGame wordData={wordData} />}
     </div>
   );
