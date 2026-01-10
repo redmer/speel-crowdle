@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import "../styles/WordleGame.css";
 
-interface WordData {
-  id: string;
-  label: string;
+export interface WordData {
+  term_id: string;
+  answer: string;
   definition: string;
-  strlen: string;
+  answer_len: string;
 }
 
 interface WordleGameProps {
@@ -22,9 +22,9 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
   const [message, setMessage] = useState<string>("");
   const [letterStates, setLetterStates] = useState<LetterStates>({});
 
-  const word = wordData.label.toLowerCase();
+  const word = wordData.answer.toLowerCase();
   let maxGuesses = 6;
-  if (parseInt(wordData.strlen, 10) >= 7) {
+  if (parseInt(wordData.answer_len, 10) >= 7) {
     maxGuesses = 7;
   }
 
@@ -191,7 +191,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
           </h2>
           <p className="definition">{wordData.definition}</p>
           <a
-            href={wordData.id}
+            href={wordData.term_id}
             target="_blank"
             rel="noopener noreferrer"
             className="thesaurus-link"

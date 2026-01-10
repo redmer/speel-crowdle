@@ -1,12 +1,5 @@
-interface WordData {
-  id: string;
-  label: string;
-  definition: string;
-  strlen: string;
-}
-
 import { useEffect, useState } from "react";
-// import "./App.css";
+import type { WordData } from "./components/WordleGame";
 import WordleGame from "./components/WordleGame";
 
 function App(): JSX.Element {
