@@ -193,7 +193,7 @@
 
 .letter-grid {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 6px;
   justify-content: center;
 }
