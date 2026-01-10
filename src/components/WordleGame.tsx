@@ -23,7 +23,10 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
   const [letterStates, setLetterStates] = useState<LetterStates>({});
 
   const word = wordData.label.toLowerCase();
-  const maxGuesses = 6;
+  let maxGuesses = 6;
+  if (parseInt(wordData.strlen, 10) >= 7) {
+    maxGuesses = 7;
+  }
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent): void => {
