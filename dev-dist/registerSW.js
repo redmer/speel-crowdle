@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) navigator.serviceWorker.register('/speel-crowdle/dev-sw.js?dev-sw', { scope: '/speel-crowdle/', type: 'classic' })

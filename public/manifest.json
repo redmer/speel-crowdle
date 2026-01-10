@@ -1,0 +1,20 @@
+{
+  "name": "CROWdle",
+  "short_name": "CROWdle",
+  "description": "Raad dagelijks het woord uit de CROW-thesaurus – binnen zes pogingen",
+  "start_url": "/speel-crowdle/",
+  "scope": "/speel-crowdle/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#009adc",
+  "background_color": "#2e3b6a",
+  "categories": ["games"],
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "240x240",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
