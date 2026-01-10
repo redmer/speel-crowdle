@@ -28,6 +28,11 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
     maxGuesses = 7;
   }
 
+  const transformToLigature = (input: string): string => {
+    // Replace consecutive i+j with the IJ ligature
+    return input.toLowerCase().replace(/ij/g, "Ĳ");
+  };
+
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent): void => {
       if (won) return;
@@ -37,8 +42,13 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
       } else if (e.key === "Backspace") {
         setCurrentGuess((prev) => prev.slice(0, -1));
       } else if (/^[a-zñ]$/i.test(e.key)) {
-        if (currentGuess.length < word.length) {
-          setCurrentGuess((prev) => prev + e.key.toLowerCase());
+        if (currentGuess.length <= word.length) {
+          const newGuess = currentGuess + e.key.toLowerCase();
+          // Transform ij to Ĳ
+          const transformed = transformToLigature(newGuess);
+          if (transformed.length <= word.length) {
+            setCurrentGuess(transformed);
+          }
         }
       }
     };
@@ -167,9 +177,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
           <input
             type="text"
             value={currentGuess.toUpperCase()}
-            // onChange={(e) => setCurrentGuess(e.target.value.toLowerCase())}
             placeholder={`Voer een ${word.length}-letterwoord in`}
-            maxLength={word.length}
             autoFocus
           />
           <button onClick={handleSubmitGuess}>Raad</button>
