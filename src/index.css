@@ -10,10 +10,14 @@
   box-sizing: border-box;
 }
 
+html {
+  background-color: var(--crow-color-resolution-blue);
+}
+
 body {
   font-family: system-ui, ui-sans-serif, sans-serif;
   background: linear-gradient(
-    135deg,
+    0deg,
     var(--crow-color-vivid-cerulean) 0%,
     var(--crow-color-resolution-blue) 100%
   );
@@ -25,7 +29,7 @@ body {
 
 #root {
   width: 100%;
-  padding: 1em 0 5em;
+  padding: 1em 0 2em;
 }
 
 .container {
