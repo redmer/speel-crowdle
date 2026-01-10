@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import type { WordData } from "./components/WordleGame";
-import WordleGame from "./components/WordleGame";
+import type { WordData } from "./components/WordleGame.tsx";
+import WordleGame from "./components/WordleGame.tsx";
 
 function App(): JSX.Element {
   const [wordData, setWordData] = useState<WordData | null>(null);
@@ -55,7 +55,9 @@ function App(): JSX.Element {
   };
 
   const appTitle = `CROWdle`;
-  const appDesc = `Raad dagelijks het woord uit de CROW-thesaurus – binnen zes pogingen.`;
+  const appDesc = `Raad dagelijks het woord uit de CROW-thesaurus – binnen ${
+    wordData ? (parseInt(wordData.answer_len, 10) >= 7 ? "7" : "6") : "6"
+  } pogingen.`;
 
   if (loading) {
     return (
