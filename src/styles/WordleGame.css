@@ -123,7 +123,11 @@
 }
 
 .result {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.1) 0%,
+    rgba(102, 126, 234, 0.1) 100%
+  );
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
