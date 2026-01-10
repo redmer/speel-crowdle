@@ -26,7 +26,7 @@ function App(): JSX.Element {
     if (queryDate !== null) return queryDate;
 
     const today = new Date();
-    return today.toISOString().split("T")[0];
+    return today.toISOString().split("T")[0] + "Z";
   };
 
   const fetchWordOfTheDay = async (): Promise<void> => {
