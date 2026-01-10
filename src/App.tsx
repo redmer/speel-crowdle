@@ -46,13 +46,14 @@ function App(): JSX.Element {
       });
 
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        throw new Error(`API-fout: ${response.status}`);
       }
 
       const data: WordData = await response.json();
       setWordData(data);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      const errorMessage =
+        err instanceof Error ? err.message : "Onbekende fout";
       setError(errorMessage);
       console.error("Failed to fetch word:", err);
     } finally {
@@ -60,11 +61,15 @@ function App(): JSX.Element {
     }
   };
 
+  const appTitle = `CROWordle`;
+  const appDesc = `Raad dagelijks het woord uit de CROW-thesaurus – binnen zes pogingen.`;
+
   if (loading) {
     return (
       <div className="container">
-        <h1>Thesaurus Wordle</h1>
-        <p>Loading word of the day...</p>
+        <h1>{appTitle}</h1>
+        <p>{appDesc}</p>
+        <p>Woord van de dag laden...</p>
       </div>
     );
   }
@@ -72,16 +77,18 @@ function App(): JSX.Element {
   if (error) {
     return (
       <div className="container">
-        <h1>Thesaurus Wordle</h1>
-        <p className="error">Error: {error}</p>
-        <button onClick={fetchWordOfTheDay}>Try Again</button>
+        <h1>{appTitle}</h1>
+        <p>{appDesc}</p>
+        <p className="error">Fout: {error}</p>
+        <button onClick={fetchWordOfTheDay}>Probeer opnieuw</button>
       </div>
     );
   }
 
   return (
     <div className="container">
-      <h1>Thesaurus Wordle</h1>
+      <h1>{appTitle}</h1>
+      <p>{appDesc}</p>
       {wordData && <WordleGame wordData={wordData} />}
     </div>
   );

@@ -61,7 +61,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
 
   const handleSubmitGuess = (): void => {
     if (currentGuess.length !== word.length) {
-      setMessage("Word must be " + word.length + " letters");
+      setMessage(`Woord moet ${word.length} letters lang zijn`);
       setTimeout(() => setMessage(""), 2000);
       return;
     }
@@ -89,9 +89,9 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
 
     if (newGuess === word) {
       setWon(true);
-      setMessage("🎉 You won!");
+      setMessage("🎉 Gewonnen!");
     } else if (newGuesses.length >= maxGuesses) {
-      setMessage(`Game Over! The word was: ${word}`);
+      setMessage(`Game Over! Het woord was: ${word}`);
       setWon(true);
     }
 
@@ -132,18 +132,18 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
             type="text"
             value={currentGuess.toUpperCase()}
             // onChange={(e) => setCurrentGuess(e.target.value.toLowerCase())}
-            placeholder={`Enter a ${word.length}-letter word`}
+            placeholder={`Voer een ${word.length}-letterwoord in`}
             maxLength={word.length}
             autoFocus
           />
-          <button onClick={handleSubmitGuess}>Guess</button>
+          <button onClick={handleSubmitGuess}>Raad</button>
         </div>
       )}
 
       {won && (
         <div className="result">
           <h2>
-            Word: <span className="word-label">{word.toUpperCase()}</span>
+            Woord: <span className="word-label">{word.toUpperCase()}</span>
           </h2>
           <p className="definition">{wordData.definition}</p>
           <a
@@ -152,13 +152,13 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
             rel="noopener noreferrer"
             className="thesaurus-link"
           >
-            View in CROW Thesaurus →
+            Toon in CROW-Thesaurus →
           </a>
         </div>
       )}
 
       <div className="keyboard">
-        <h3>Letters guessed:</h3>
+        <h3>Geraden letters:</h3>
         <div className="letter-grid">
           {Object.entries(letterStates).map(([letter, state]) => (
             <span key={letter} className={`letter-indicator ${state}`}>
