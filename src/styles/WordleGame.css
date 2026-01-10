@@ -38,6 +38,11 @@
   transition: all 0.3s ease;
   background: white;
   color: #333;
+  /* CSS variables for reveal animation */
+  --reveal-bg: white;
+  --reveal-color: #333;
+  --reveal-border: #e0e0e0;
+  --reveal-shadow: transparent;
 }
 
 .letter-box.filled {
@@ -45,25 +50,56 @@
 }
 
 .letter-box.correct {
-  background: #10b981;
-  color: white;
-  border-color: #10b981;
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+  --reveal-bg: #10b981;
+  --reveal-color: white;
+  --reveal-border: #10b981;
+  --reveal-shadow: rgba(16, 185, 129, 0.3);
 }
 
 .letter-box.present {
-  background: #f59e0b;
-  color: white;
-  border-color: #f59e0b;
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
+  --reveal-bg: #f59e0b;
+  --reveal-color: white;
+  --reveal-border: #f59e0b;
+  --reveal-shadow: rgba(245, 158, 11, 0.3);
 }
 
 .letter-box.absent {
-  background: #e5e7eb;
-  color: #999;
-  border-color: #e5e7eb;
+  --reveal-bg: #e5e7eb;
+  --reveal-color: #999;
+  --reveal-border: #e5e7eb;
+  --reveal-shadow: transparent;
+}
+
+/* Flip animation */
+.letter-box.reveal {
+  animation: flipIn 0.75s alternate forwards;
+}
+
+@keyframes flipIn {
+  0% {
+    transform: rotateX(0deg);
+    background: white;
+    color: #333;
+    border-color: #667eea;
+    box-shadow: 0 0 0 transparent;
+  }
+  50% {
+    transform: rotateX(90deg);
+  }
+  50.01% {
+    background: var(--reveal-bg);
+    color: var(--reveal-color);
+    border-color: var(--reveal-border);
+    box-shadow: 0 4px 8px var(--reveal-shadow);
+  }
+  100% {
+    transform: rotateX(0deg);
+    background: var(--reveal-bg);
+    color: var(--reveal-color);
+    border-color: var(--reveal-border);
+    box-shadow: 0 4px 8px var(--reveal-shadow);
+    transform: scale(1.05);
+  }
 }
 
 .message {

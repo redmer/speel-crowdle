@@ -133,12 +133,21 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
     }
     setLetterStates(newLetterStates);
 
+    // Calculate total animation time: last letter's delay + animation duration (0.75s)
+    const animationDuration = 0.75; // seconds
+    const lastLetterDelay = (word.length - 1) * 0.1; // seconds
+    const totalAnimationTime = (lastLetterDelay + animationDuration) * 1000; // convert to ms
+
     if (newGuess === word) {
-      setWon(true);
-      setMessage("🎉 Gewonnen!");
+      setTimeout(() => {
+        setWon(true);
+        setMessage("🎉 Gewonnen!");
+      }, totalAnimationTime);
     } else if (newGuesses.length >= maxGuesses) {
-      setMessage(`Game Over! Het woord was: ${word}`);
-      setWon(true);
+      setTimeout(() => {
+        setWon(true);
+        setMessage(`Game Over! Het woord was: ${word}`);
+      }, totalAnimationTime);
     }
 
     setCurrentGuess("");
@@ -156,11 +165,16 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
               const state = guesses[i]
                 ? getLetterState(guesses[i][j], j, guesses[i])
                 : "";
+              const isRevealed = !!guesses[i];
+              const animationDelay = isRevealed ? `${j * 0.2}s` : "0s";
 
               return (
                 <div
                   key={j}
-                  className={`letter-box ${state} ${letter ? "filled" : ""}`}
+                  className={`letter-box ${state} ${letter ? "filled" : ""} ${
+                    isRevealed ? "reveal" : ""
+                  }`}
+                  style={{ animationDelay }}
                 >
                   {letter?.toUpperCase()}
                 </div>
