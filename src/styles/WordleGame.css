@@ -197,6 +197,14 @@
   font-style: italic;
 }
 
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 .thesaurus-link {
   display: inline-block;
   background: #10b981;

@@ -1,0 +1,23 @@
+.share-button {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+}
+
+.share-button:hover {
+  background: #5568d3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.share-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.2);
+}

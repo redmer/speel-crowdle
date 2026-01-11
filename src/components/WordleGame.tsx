@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import "../styles/WordleGame.css";
+import ShareButton from "./ShareButton";
 
 export interface WordData {
   term_id: string;
@@ -236,14 +237,28 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
             Woord: <span className="word-label">{word.toUpperCase()}</span>
           </h2>
           <p className="definition">{wordData.definition}</p>
-          <a
-            href={wordData.term_id}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="thesaurus-link"
-          >
-            Toon in CROW-Begrippen →
-          </a>
+          <div className="result-actions">
+            <a
+              href={wordData.term_id}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="thesaurus-link"
+            >
+              Toon in CROW-Begrippen →
+            </a>
+            <ShareButton
+              guesses={guesses}
+              word={word}
+              maxGuesses={currentMaxGuesses}
+              type="copy"
+            />
+            <ShareButton
+              guesses={guesses}
+              word={word}
+              maxGuesses={currentMaxGuesses}
+              type="share"
+            />
+          </div>
         </div>
       )}
 

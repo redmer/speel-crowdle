@@ -26,14 +26,14 @@ body {
 }
 
 #root {
-  position: fixed;
+  /* position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 0; */
 
-  @media screen and (width <= 600px) {
-    position: unset;
+  @media screen and (width >= 600px) {
+    padding: 2rem;
   }
 
   width: 100%;
@@ -75,7 +75,7 @@ button {
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 
 button:hover {
