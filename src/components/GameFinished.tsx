@@ -7,10 +7,11 @@ import {
 } from "../utils/gameStorage";
 import Modal from "./Modal";
 import ResultActions from "./ResultActions";
+import ShareButton from "./ShareButton";
 
 interface GameFinishedProps {
   termId: string;
-  definition: string;
+  definition?: string;
   guesses: string[];
   word: string;
   date: string;
@@ -74,21 +75,37 @@ const GameFinished: FC<GameFinishedProps> = ({
           ) : (
             <>
               <h1 className="game-over">Game Over</h1>
-              <p className="game-over-text">
-                Het woord was: <strong>{word.toUpperCase()}</strong>
-              </p>
             </>
           )}
+        </div>
+
+        <ResultActions termId={termId} definition={definition} word={word} />
+
+        <div className="share-box">
+          <ShareButton
+            guesses={guesses}
+            word={word}
+            date={date}
+            playerWon={playerWon}
+            type="copy"
+          />
+          <ShareButton
+            guesses={guesses}
+            word={word}
+            date={date}
+            playerWon={playerWon}
+            type="share"
+          />
         </div>
 
         <div className="stats-box">
           <div className="stat">
             <div className="stat-number">{gamesPlayed}</div>
-            <div className="stat-label">Spellen gespeeld</div>
+            <div className="stat-label">Gespeeld</div>
           </div>
           <div className="stat">
             <div className="stat-number">{gamesWon}</div>
-            <div className="stat-label">Wins</div>
+            <div className="stat-label">Gewonnen</div>
           </div>
           <div className="stat">
             <div className="stat-percentage">
@@ -98,15 +115,6 @@ const GameFinished: FC<GameFinishedProps> = ({
             <div className="stat-label">Winrate</div>
           </div>
         </div>
-
-        <ResultActions
-          termId={termId}
-          definition={definition}
-          guesses={guesses}
-          word={word}
-          date={date}
-          playerWon={playerWon}
-        />
 
         {(pastGames.length > 1 || missedDates.length > 0) && (
           <div className="past-games-section">
@@ -137,9 +145,7 @@ const GameFinished: FC<GameFinishedProps> = ({
                         game.won ? "won" : "lost"
                       }`}
                     >
-                      {game.won
-                        ? `✓ ${game.guesses.length}/${game.guesses.length + 1}`
-                        : "✗"}
+                      {game.won ? `${game.guesses.length}/${6}` : "X/6"}
                     </div>
                   </div>
                 ))}

@@ -284,7 +284,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
       {gameIsFinished && showGameFinished && (
         <GameFinished
           termId={wordData.term_id}
-          definition={wordData.definition || ""}
+          definition={wordData.definition}
           guesses={guesses}
           word={word}
           date={wordData.for_date}

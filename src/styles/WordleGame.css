@@ -173,7 +173,6 @@
   );
   padding: 20px;
   border-radius: 10px;
-  margin-bottom: 20px;
   border: 2px solid #10b981;
 }
 
@@ -190,9 +189,11 @@
 }
 
 .definition {
-  color: #555;
-  font-size: 1rem;
-  margin-bottom: 15px;
+  line-height: 1.6;
+  margin: 15px 0;
+}
+
+.definition-missing {
   line-height: 1.6;
   font-style: italic;
 }

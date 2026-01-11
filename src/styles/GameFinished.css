@@ -10,6 +10,14 @@
   border-bottom: 1px solid #eee;
 }
 
+.share-box {
+  display: flex;
+  gap: 4px;
+  * {
+    flex: 1;
+  }
+}
+
 .game-finished-header h1 {
   margin: 0 0 12px 0;
   font-size: 32px;
