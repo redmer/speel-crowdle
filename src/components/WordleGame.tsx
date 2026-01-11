@@ -115,7 +115,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
 
   const handleLetterClick = (letter: string): void => {
     if (gameIsFinished) return;
-    if (currentGuess.length < word.length) {
+    if (currentGuess.length <= word.length) {
       const newGuess = currentGuess + letter.toLowerCase();
       const transformed = transformToLigature(newGuess);
       if (transformed.length <= word.length) {
