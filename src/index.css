@@ -12,6 +12,7 @@
 
 html {
   background-color: var(--crow-color-resolution-blue);
+  height: 100%;
 }
 
 body {
@@ -21,22 +22,34 @@ body {
     var(--crow-color-vivid-cerulean) 0%,
     var(--crow-color-resolution-blue) 100%
   );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+  min-height: 100%;
 }
 
 #root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  @media screen and (width <= 600px) {
+    position: unset;
+  }
+
   width: 100%;
-  padding: 1em 0;
+  /* padding: 1em 0; */
+  display: flex;
+  /* align-items: center;
+  justify-content: center; */
+  align-items: center;
+  justify-content: center;
 }
 
 .container {
   max-width: 600px;
   width: 100%;
   text-align: center;
-  margin: 0 auto;
+  margin: auto auto;
 
   @media screen and (width <= 600px) {
     min-height: max-content;

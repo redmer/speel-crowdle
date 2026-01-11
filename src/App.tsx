@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import GameExplanation from "./components/GameExplanation.tsx";
 import type { WordData } from "./components/WordleGame.tsx";
 import WordleGame from "./components/WordleGame.tsx";
 
@@ -6,6 +7,7 @@ function App(): JSX.Element {
   const [wordData, setWordData] = useState<WordData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showExplanation, setShowExplanation] = useState(true);
 
   useEffect(() => {
     fetchWordOfTheDay();
@@ -57,7 +59,17 @@ function App(): JSX.Element {
 
   const appTitle = `CROWdle`;
   const appDesc = `Raad dagelijks het CROW-begrip van de dag – binnen zes pogingen.`;
-
+  if (showExplanation) {
+    return (
+      <div className="container">
+        <GameExplanation
+          onStart={() => setShowExplanation(false)}
+          title={appTitle}
+          description={appDesc}
+        />
+      </div>
+    );
+  }
   if (loading) {
     return (
       <div className="container">
@@ -85,10 +97,6 @@ function App(): JSX.Element {
 
   return (
     <div className="container">
-      <header>
-        <h1>{appTitle}</h1>
-        <p>{appDesc}</p>
-      </header>
       {wordData && <WordleGame wordData={wordData} />}
     </div>
   );
