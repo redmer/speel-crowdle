@@ -227,36 +227,6 @@
   opacity: 0.7;
 }
 
-.letter-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-}
-
-.letter-indicator {
-  display: inline-block;
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 1px;
-  color: white;
-}
-
-.letter-indicator.correct {
-  background: #10b981;
-}
-
-.letter-indicator.present {
-  background: #f59e0b;
-}
-
-.letter-indicator.absent {
-  background: #e5e7eb;
-  color: #999;
-}
-
 /* Virtual Keyboard Styles */
 .virtual-keyboard {
   margin-top: 30px;
