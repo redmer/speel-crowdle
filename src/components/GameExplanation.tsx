@@ -81,7 +81,7 @@ const GameExplanation: FC<GameExplanationProps> = ({
           </p>
         </div>
 
-        <button className="start-button" onClick={onStart}>
+        <button className="start-button" autoFocus onClick={onStart}>
           Spelen →
         </button>
       </div>
