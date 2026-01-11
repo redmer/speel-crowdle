@@ -1,7 +1,13 @@
 import { FC, useEffect, useState } from "react";
 import "../styles/WordleGame.css";
+import {
+  getGameState,
+  getGameStats,
+  saveGameState,
+  saveGameStats,
+} from "../utils/gameStorage";
+import GameFinished from "./GameFinished";
 import LetterBox from "./LetterBox";
-import ResultActions from "./ResultActions";
 import VirtualKeyboard from "./VirtualKeyboard";
 
 export interface WordData {
@@ -31,8 +37,30 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
   const [message, setMessage] = useState<string>("");
   const [letterStates, setLetterStates] = useState<LetterStates>({});
   const [currentMaxGuesses, setMaxGuesses] = useState<number>(INITIAL_GUESSES);
+  const [gamesWon, setGamesWon] = useState<number>(0);
+  const [gamesPlayed, setGamesPlayed] = useState<number>(0);
+  const [showGameFinished, setShowGameFinished] = useState<boolean>(false);
 
   const word = wordData.answer.toLowerCase();
+  const dateKey = wordData.for_date;
+
+  // Load stats from localStorage on component mount
+  useEffect(() => {
+    const stats = getGameStats();
+    setGamesWon(stats.gamesWon);
+    setGamesPlayed(stats.gamesPlayed);
+
+    // Check if game was already played today and load state
+    const savedGame = getGameState(dateKey);
+    if (savedGame) {
+      setGuesses(savedGame.guesses);
+      setGameIsFinished(savedGame.finished);
+      setPlayerWon(savedGame.won);
+      if (savedGame.finished) {
+        setShowGameFinished(true);
+      }
+    }
+  }, [dateKey]);
 
   const transformToLigature = (input: string): string => {
     // Replace consecutive i+j with the IJ ligature
@@ -165,11 +193,43 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
         setGameIsFinished(true);
         setPlayerWon(true);
         setMessage("🎉 Gewonnen!");
+
+        // Save game state and update stats
+        const newStats = {
+          gamesWon: gamesWon + 1,
+          gamesPlayed: gamesPlayed + 1,
+        };
+        saveGameState({
+          date: dateKey,
+          word: word,
+          guesses: newGuesses,
+          won: true,
+          finished: true,
+          finishedAt: Date.now(),
+        });
+        saveGameStats(newStats);
+        setGamesWon(newStats.gamesWon);
+        setGamesPlayed(newStats.gamesPlayed);
+        setShowGameFinished(true);
       }, totalAnimationTime);
     } else if (newGuesses.length >= TRUE_MAX_GUESSES) {
       setTimeout(() => {
         setGameIsFinished(true);
         setMessage(`Game Over! Het woord was: ${word}`);
+
+        // Save game state and update stats
+        const newStats = { gamesWon: gamesWon, gamesPlayed: gamesPlayed + 1 };
+        saveGameState({
+          date: dateKey,
+          word: word,
+          guesses: newGuesses,
+          won: false,
+          finished: true,
+          finishedAt: Date.now(),
+        });
+        saveGameStats(newStats);
+        setGamesPlayed(newStats.gamesPlayed);
+        setShowGameFinished(true);
       }, totalAnimationTime);
     } else if (newGuesses.length >= INITIAL_GUESSES) {
       setTimeout(() => {
@@ -221,27 +281,17 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
         ></p>
       )}
 
-      {/* Remove the input, as it's redundant with the virtual keyboard. */}
-      {/* {!won && (
-        <div className="input-section">
-          <input
-            type="text"
-            value={currentGuess.toUpperCase()}
-            placeholder={`Voer een ${word.length}-letterwoord in`}
-            autoFocus
-          />
-          <button onClick={handleSubmitGuess}>Raad</button>
-        </div>
-      )} */}
-
-      {gameIsFinished && (
-        <ResultActions
+      {gameIsFinished && showGameFinished && (
+        <GameFinished
           termId={wordData.term_id}
           definition={wordData.definition || ""}
           guesses={guesses}
           word={word}
           date={wordData.for_date}
           playerWon={playerWon}
+          gamesWon={gamesWon}
+          gamesPlayed={gamesPlayed}
+          onClose={() => setShowGameFinished(false)}
         />
       )}
 
