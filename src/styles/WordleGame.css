@@ -223,18 +223,6 @@
   box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
 }
 
-.keyboard {
-  margin-top: 25px;
-}
-
-.keyboard h3 {
-  color: #333;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-  opacity: 0.7;
-}
-
 /* Virtual Keyboard Styles */
 .virtual-keyboard {
   margin-top: 30px;
@@ -324,9 +312,10 @@
 }
 
 .key.special {
-  flex: 1 0 auto;
+  flex: 1.5 0 auto;
   /* flex-grow: 1; */
-  padding: 20px 12px;
+  /* padding: 20px 12px; */
+  padding: 0;
   /* font-size: 0.75rem; */
   background: #667eea;
   color: white;
@@ -335,6 +324,7 @@
 
 .key.special:hover:not(:disabled) {
   background: #5568d3;
+  transform: none;
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
 }
 

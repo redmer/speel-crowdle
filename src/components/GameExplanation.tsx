@@ -1,5 +1,6 @@
 import { FC } from "react";
 import "../styles/GameExplanation.css";
+import LetterBox from "./LetterBox";
 
 interface GameExplanationProps {
   onStart: () => void;
@@ -15,50 +16,62 @@ const GameExplanation: FC<GameExplanationProps> = ({
   return (
     <div className="explanation-overlay">
       <div className="explanation-modal">
-        <h1>{title}</h1>
+        <h1>Hoe speel je {title}?</h1>
 
         <div className="explanation-content">
           <p className="intro">{description}</p>
 
           <div className="rules-section">
-            <h2>Spelregels</h2>
-            <ol>
-              <li>Typ een woord van de juiste lengte</li>
-              <li>Druk op ⏎ om je gok in te dienen</li>
+            <ul>
               <li>
-                De kleur van elke letter verandert om aan te geven hoe dicht je
-                bij het antwoord bent
+                Elke poging moet een bestaand woord van de juiste lengte zijn
               </li>
-            </ol>
+              <li>
+                De kleur van elke letter geeft aan hoe dicht je bij het antwoord
+                bent
+              </li>
+            </ul>
           </div>
 
           <div className="colors-section">
             <div className="color-explanation">
-              <div className="color-box correct">
-                <span className="letter">A</span>
+              <div className="guess-row">
+                <LetterBox letter="A" state="" />
+                <LetterBox letter="P" state="" />
+                <LetterBox letter="R" state="correct" />
+                <LetterBox letter="I" state="" />
+                <LetterBox letter="L" state="" />
               </div>
-              <div className="color-text">
-                <strong>Groen:</strong> De letter staat op de juiste plek
-              </div>
+              <p>
+                Deze <strong>R</strong> staat op de juiste plek
+              </p>
             </div>
 
             <div className="color-explanation">
-              <div className="color-box present">
-                <span className="letter">B</span>
+              <div className="guess-row">
+                <LetterBox letter="M" state="" />
+                <LetterBox letter="A" state="present" />
+                <LetterBox letter="A" state="" />
+                <LetterBox letter="R" state="" />
+                <LetterBox letter="T" state="" />
               </div>
-              <div className="color-text">
-                <strong>Geel:</strong> De letter komt voor in het woord, maar
-                niet op deze plek
-              </div>
+              <p>
+                Eén <strong>A</strong> komt voor, maar niet op de 2e of 3e
+                plaats.
+              </p>
             </div>
 
             <div className="color-explanation">
-              <div className="color-box absent">
-                <span className="letter">C</span>
+              <div className="guess-row">
+                <LetterBox letter="Z" state="absent" />
+                <LetterBox letter="O" state="" />
+                <LetterBox letter="M" state="" />
+                <LetterBox letter="E" state="" />
+                <LetterBox letter="R" state="" />
               </div>
-              <div className="color-text">
-                <strong>Grijs:</strong> De letter staat niet in het woord
-              </div>
+              <p>
+                <strong>Z</strong> komt niet in het woord voor.
+              </p>
             </div>
           </div>
 

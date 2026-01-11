@@ -4,14 +4,16 @@ import "../styles/ShareButton.css";
 interface ShareButtonProps {
   guesses: string[];
   word: string;
-  maxGuesses: number;
+  date: string;
+  playerWon: boolean;
   type: "share" | "copy";
 }
 
 const ShareButton: FC<ShareButtonProps> = ({
   guesses,
   word,
-  maxGuesses,
+  date,
+  playerWon,
   type,
 }) => {
   const [notificationText, setNotificationText] = useState<string>("");
@@ -74,11 +76,15 @@ const ShareButton: FC<ShareButtonProps> = ({
       absent: "⬜",
     };
 
-    let today = new Date();
+    // Date of the game, remove Z timezone qualifier.
+    const [year, month, day] = date.slice(0, -1).split("-");
+    const shortDate = `${day}-${month}-${year}`;
 
-    let shareText = `${today.toLocaleDateString(undefined, {
-      weekday: undefined,
-    })}\n\n`;
+    // Add score
+    const totalGuesses = playerWon ? guesses.length : "X";
+
+    // Start building sharing text
+    let shareText = `CROWdle van ${shortDate} (${totalGuesses}/6)\n\n`;
 
     // Add colored squares for each guess
     for (const guess of guesses) {
@@ -90,12 +96,8 @@ const ShareButton: FC<ShareButtonProps> = ({
       shareText += row + "\n";
     }
 
-    // Add score
-    const totalGuesses = guesses.length;
-    shareText += `\n${totalGuesses}/${maxGuesses}\n\n`;
-
     // Add link to self
-    shareText += window.location.href;
+    shareText += "\n" + window.location.href;
 
     return shareText;
   };
@@ -107,7 +109,6 @@ const ShareButton: FC<ShareButtonProps> = ({
     if (type == "share") {
       try {
         await navigator.share({
-          title: "CROWdle",
           text: shareText,
         });
       } catch (err) {

@@ -1,6 +1,8 @@
 import { FC, useEffect, useState } from "react";
 import "../styles/WordleGame.css";
-import ShareButton from "./ShareButton";
+import LetterBox from "./LetterBox";
+import ResultActions from "./ResultActions";
+import VirtualKeyboard from "./VirtualKeyboard";
 
 export interface WordData {
   term_id: string;
@@ -8,6 +10,7 @@ export interface WordData {
   definition?: string;
   answer_len: string;
   answer_hint?: string;
+  for_date: string;
 }
 
 interface WordleGameProps {
@@ -23,7 +26,8 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
 
   const [guesses, setGuesses] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState<string>("");
-  const [won, setWon] = useState<boolean>(false);
+  const [gameIsFinished, setGameIsFinished] = useState<boolean>(false);
+  const [playerWon, setPlayerWon] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [letterStates, setLetterStates] = useState<LetterStates>({});
   const [currentMaxGuesses, setMaxGuesses] = useState<number>(INITIAL_GUESSES);
@@ -37,7 +41,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent): void => {
-      if (won) return;
+      if (gameIsFinished) return;
 
       if (e.key === "Enter") {
         handleSubmitGuess();
@@ -55,9 +59,9 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
       }
     };
 
-    window.addEventListener("keydown", handleKeyPress);
+    self.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [currentGuess, won, word]);
+  }, [currentGuess, gameIsFinished, word]);
 
   const getLetterState = (
     letter: string,
@@ -110,7 +114,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
   };
 
   const handleLetterClick = (letter: string): void => {
-    if (won) return;
+    if (gameIsFinished) return;
     if (currentGuess.length < word.length) {
       const newGuess = currentGuess + letter.toLowerCase();
       const transformed = transformToLigature(newGuess);
@@ -121,7 +125,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
   };
 
   const handleBackspaceClick = (): void => {
-    if (won) return;
+    if (gameIsFinished) return;
     setCurrentGuess((prev) => prev.slice(0, -1));
   };
 
@@ -158,12 +162,13 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
 
     if (newGuess === word) {
       setTimeout(() => {
-        setWon(true);
+        setGameIsFinished(true);
+        setPlayerWon(true);
         setMessage("🎉 Gewonnen!");
       }, totalAnimationTime);
     } else if (newGuesses.length >= TRUE_MAX_GUESSES) {
       setTimeout(() => {
-        setWon(true);
+        setGameIsFinished(true);
         setMessage(`Game Over! Het woord was: ${word}`);
       }, totalAnimationTime);
     } else if (newGuesses.length >= INITIAL_GUESSES) {
@@ -196,15 +201,13 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
               const animationDelay = isRevealed ? `${j * 0.2}s` : "0s";
 
               return (
-                <div
+                <LetterBox
                   key={j}
-                  className={`letter-box ${state} ${letter ? "filled" : ""} ${
-                    isRevealed ? "reveal" : ""
-                  }`}
-                  style={{ animationDelay }}
-                >
-                  {letter?.toUpperCase()}
-                </div>
+                  letter={letter}
+                  state={state}
+                  animationDelay={animationDelay}
+                  isFilled={!!letter}
+                />
               );
             })}
           </div>
@@ -231,94 +234,25 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
         </div>
       )} */}
 
-      {won && (
-        <div className="result">
-          <h2>
-            Woord: <span className="word-label">{word.toUpperCase()}</span>
-          </h2>
-          <p className="definition">{wordData.definition}</p>
-          <div className="result-actions">
-            <a
-              href={wordData.term_id}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="thesaurus-link"
-            >
-              Toon in CROW-Begrippen →
-            </a>
-            <ShareButton
-              guesses={guesses}
-              word={word}
-              maxGuesses={currentMaxGuesses}
-              type="copy"
-            />
-            <ShareButton
-              guesses={guesses}
-              word={word}
-              maxGuesses={currentMaxGuesses}
-              type="share"
-            />
-          </div>
-        </div>
+      {gameIsFinished && (
+        <ResultActions
+          termId={wordData.term_id}
+          definition={wordData.definition || ""}
+          guesses={guesses}
+          word={word}
+          date={wordData.for_date}
+          playerWon={playerWon}
+        />
       )}
 
-      {!won && (
-        <div className="virtual-keyboard">
-          <div className="keyboard-row">
-            {["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"].map(
-              (letter) => (
-                <button
-                  key={letter}
-                  className={`key ${letterStates[letter.toLowerCase()] || ""}`}
-                  onClick={() => handleLetterClick(letter)}
-                  disabled={won}
-                >
-                  {letter}
-                </button>
-              )
-            )}
-          </div>
-          <div className="keyboard-row">
-            <div className="half-key" />
-            {["A", "S", "D", "F", "G", "H", "J", "K", "L"].map((letter) => (
-              <button
-                key={letter}
-                className={`key ${letterStates[letter.toLowerCase()] || ""}`}
-                onClick={() => handleLetterClick(letter)}
-                disabled={won}
-              >
-                {letter}
-              </button>
-            ))}
-            <div className="half-key" />
-          </div>
-          <div className="keyboard-row">
-            <button
-              className="key special enter"
-              onClick={handleSubmitGuess}
-              disabled={won}
-            >
-              ⏎
-            </button>
-            {["Z", "X", "C", "V", "B", "N", "M"].map((letter) => (
-              <button
-                key={letter}
-                className={`key ${letterStates[letter.toLowerCase()] || ""}`}
-                onClick={() => handleLetterClick(letter)}
-                disabled={won}
-              >
-                {letter}
-              </button>
-            ))}
-            <button
-              className="key special backspace"
-              onClick={handleBackspaceClick}
-              disabled={won}
-            >
-              ⌫
-            </button>
-          </div>
-        </div>
+      {!gameIsFinished && (
+        <VirtualKeyboard
+          letterStates={letterStates}
+          onLetterClick={handleLetterClick}
+          onBackspaceClick={handleBackspaceClick}
+          onSubmitGuess={handleSubmitGuess}
+          disabled={gameIsFinished}
+        />
       )}
     </div>
   );
