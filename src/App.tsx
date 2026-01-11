@@ -14,9 +14,10 @@ function App(): JSX.Element {
   const getDate = (): string => {
     const paramsString = window.location.search;
     const searchParams = new URLSearchParams(paramsString);
-    const queryDate = searchParams.get("debugDate");
+    const queryDate = searchParams.get("date");
 
-    if (queryDate !== null) return queryDate;
+    if (queryDate !== null)
+      return queryDate + (queryDate.includes("Z") ? "" : "Z");
 
     const today = new Date();
     return today.toISOString().split("T")[0] + "Z";

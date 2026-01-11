@@ -20,6 +20,12 @@ Veel speel- en leerplezier.
 
 ## Architectuur
 
-De data van de CROW-thesaurus wordt met een SPARQL-query en een JSON-LD Frame eenvoudig ingeladen in de JavaScript-code.
+- De **woorden van de dag** komen uit de CROW-thesaurus, middels deze [TriplyDB-query].
+  De query combineert SPARQL met een JSON-LD Frame voor een eenvoudige verwerking in de JavaScript-code.
+- Een statische webpagina, gehost op GitHub Actions is TypeScript + React-code, gecompileerd door Vite.
 
-TriplyDB-query: https://datasets.crow.nl/redmer-kronemeijer/-/queries/thesaurus-wordle/
+[TriplyDB-query]: https://datasets.crow.nl/redmer-kronemeijer/-/queries/thesaurus-wordle/
+
+## Debugging
+
+- `?date=2026-01-10` forceert het laden van de puzzel van 10 januari 2026.
