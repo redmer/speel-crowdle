@@ -2,7 +2,7 @@ import { FC } from "react";
 
 interface LetterBoxProps {
   letter: string;
-  state: "correct" | "present" | "absent" | "";
+  state: "correct" | "present" | "absent" | "invalid" | "";
   animationDelay?: string;
   isFilled?: boolean;
 }
@@ -16,7 +16,7 @@ const LetterBox: FC<LetterBoxProps> = ({
   return (
     <div
       className={`letter-box ${state} ${isFilled ? "filled" : ""} ${
-        state ? "reveal" : ""
+        state && state != "invalid" ? "reveal" : ""
       }`}
       style={{ animationDelay }}
     >

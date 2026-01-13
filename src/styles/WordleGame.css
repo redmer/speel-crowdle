@@ -70,6 +70,24 @@
   --reveal-shadow: transparent;
 }
 
+.letter-box.invalid {
+  border-color: #ef4444;
+  animation: shake 0.2s ease-in-out 3 alternate;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-14px);
+  }
+  75% {
+    transform: translateX(14px);
+  }
+}
+
 /* Flip animation */
 .letter-box.reveal {
   animation: flipIn 0.75s alternate forwards;

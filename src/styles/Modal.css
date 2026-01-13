@@ -74,3 +74,15 @@
   font-size: 28px;
   color: #333;
 }
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    padding: 24px;
+    overflow-y: auto;
+  }
+}
