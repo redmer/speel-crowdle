@@ -13,7 +13,7 @@ const ResultActions: FC<ResultActionsProps> = ({
   word,
 }) => {
   return (
-    <div className="result">
+    <>
       <h2>
         <div className="guess-row">
           {Array.from({ length: word.length }).map((_, i) => {
@@ -29,25 +29,28 @@ const ResultActions: FC<ResultActionsProps> = ({
           })}
         </div>
       </h2>
-      {definition ? (
-        <p className="definition">{definition}</p>
-      ) : (
-        <p className="definition definition-missing">
-          Een definitie voor ‘{word}’ ontbreekt helaas nog in de CROW-thesaurus.
-        </p>
-      )}
+      <div className="result">
+        {definition ? (
+          <p className="definition">{definition}</p>
+        ) : (
+          <p className="definition definition-missing">
+            Een definitie voor ‘{word}’ ontbreekt helaas nog in de
+            CROW-thesaurus.
+          </p>
+        )}
 
-      <div className="result-actions">
-        <a
-          href={termId}
-          target="_blank"
-          rel="noopener"
-          className="thesaurus-link"
-        >
-          Toon in CROW-Begrippen →
-        </a>
+        <div className="result-actions">
+          <a
+            href={termId}
+            target="_blank"
+            rel="noopener"
+            className="thesaurus-link"
+          >
+            Toon in CROW-Begrippen →
+          </a>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
