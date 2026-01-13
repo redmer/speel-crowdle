@@ -131,7 +131,9 @@ const GameFinished: FC<GameFinishedProps> = ({
                 {pastGames.map((game) => (
                   <div key={game.date} className="past-game-item">
                     <div className="past-game-date">
-                      {new Date(game.date).toLocaleDateString("nl-NL", {
+                      {new Date(
+                        game.date.replace(/-/g, "/").replace("Z", "")
+                      ).toLocaleDateString("nl-NL", {
                         weekday: "short",
                         month: "short",
                         day: "numeric",
@@ -153,7 +155,9 @@ const GameFinished: FC<GameFinishedProps> = ({
                 {missedDates.map((missedDate) => (
                   <div key={missedDate} className="past-game-item missed">
                     <div className="past-game-date">
-                      {new Date(missedDate).toLocaleDateString("nl-NL", {
+                      {new Date(
+                        missedDate.replace(/-/g, "/").replace("Z", "")
+                      ).toLocaleDateString("nl-NL", {
                         weekday: "short",
                         month: "short",
                         day: "numeric",

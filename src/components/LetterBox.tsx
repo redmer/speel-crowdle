@@ -15,6 +15,7 @@ const LetterBox: FC<LetterBoxProps> = ({
 }) => {
   return (
     <div
+      key={letter}
       className={`letter-box ${state} ${isFilled ? "filled" : ""} ${
         state && state != "invalid" ? "reveal" : ""
       }`}
