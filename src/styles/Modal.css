@@ -79,8 +79,7 @@
   .modal-content {
     width: 100%;
     max-width: none;
-    height: 100vh;
-    max-height: 100vh;
+    min-height: 100vh;
     border-radius: 0;
     padding: 24px;
     overflow-y: auto;
