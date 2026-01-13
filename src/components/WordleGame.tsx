@@ -6,6 +6,7 @@ import {
   saveGameState,
   saveGameStats,
 } from "../utils/gameStorage";
+import { loadWordList } from "../utils/wordValidation";
 import GameFinished from "./GameFinished";
 import LetterBox from "./LetterBox";
 import VirtualKeyboard from "./VirtualKeyboard";
@@ -40,6 +41,8 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
   const [gamesWon, setGamesWon] = useState<number>(0);
   const [gamesPlayed, setGamesPlayed] = useState<number>(0);
   const [showGameFinished, setShowGameFinished] = useState<boolean>(false);
+  const [validWords, setValidWords] = useState<Set<string> | null>(null);
+  const [isInvalidGuess, setIsInvalidGuess] = useState<boolean>(false);
 
   const word = wordData.answer.toLowerCase();
   const dateKey = wordData.for_date;
@@ -60,7 +63,10 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
         setShowGameFinished(true);
       }
     }
-  }, [dateKey]);
+
+    // Load the word list for validation
+    loadWordList(word.length).then(setValidWords);
+  }, [dateKey, word.length]);
 
   const transformToLigature = (input: string): string => {
     // Replace consecutive i+j with the IJ ligature
@@ -164,6 +170,17 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
       return;
     }
 
+    // Check if the word is valid
+    if (!validWords || !validWords.has(currentGuess.toLowerCase())) {
+      setIsInvalidGuess(true);
+      setMessage("Woord niet herkend");
+      setTimeout(() => {
+        setIsInvalidGuess(false);
+        setMessage("");
+      }, 2000);
+      return;
+    }
+
     const newGuess = currentGuess;
     const newGuesses = [...guesses, newGuess];
     setGuesses(newGuesses);
@@ -256,6 +273,8 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
                 (i === guesses.length ? currentGuess[j] : "");
               const state = guesses[i]
                 ? getLetterState(guesses[i][j], j, guesses[i])
+                : isInvalidGuess && i === guesses.length
+                ? "invalid"
                 : "";
               const isRevealed = !!guesses[i];
               const animationDelay = isRevealed ? `${j * 0.2}s` : "0s";
