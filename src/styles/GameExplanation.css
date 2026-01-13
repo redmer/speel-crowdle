@@ -50,7 +50,7 @@
 .start-button {
   width: 100%;
   padding: 14px 24px;
-  background-color: var(--crow-color-vivid-cerulean);
+  background-color: #667eea;
   color: white;
   border: none;
   border-radius: 6px;
@@ -61,9 +61,12 @@
 }
 
 .start-button:hover {
-  background-color: hsl(from var(--crow-color-vivid-cerulean) h s calc(l - 10));
+  background: #5568d3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .start-button:active {
-  background-color: hsl(from var(--crow-color-vivid-cerulean) h s calc(l - 20));
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.2);
 }

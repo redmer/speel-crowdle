@@ -64,6 +64,8 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
     if (savedGame) {
       setGuesses(savedGame.guesses);
       setGameIsFinished(savedGame.finished);
+      setMessage("🎉 Gewonnen!");
+
       onGameFinish({
         gamesPlayed: stats.gamesPlayed,
         gamesWon: stats.gamesWon,
