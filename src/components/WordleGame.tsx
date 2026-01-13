@@ -6,6 +6,7 @@ import {
   saveGameState,
   saveGameStats,
 } from "../utils/gameStorage";
+import type { XsdDate } from "../utils/isoDateHelper";
 import { loadWordList } from "../utils/wordValidation";
 import GameFinished from "./GameFinished";
 import LetterBox from "./LetterBox";
@@ -17,7 +18,7 @@ export interface WordData {
   definition?: string;
   answer_len: string;
   answer_hint?: string;
-  for_date: string;
+  for_date: XsdDate;
 }
 
 interface WordleGameProps {

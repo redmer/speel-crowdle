@@ -1,5 +1,7 @@
+import { fromXsdDate, type XsdDate } from "./isoDateHelper";
+
 export interface GameState {
-  date: string;
+  date: XsdDate;
   word: string;
   guesses: string[];
   won: boolean;
@@ -18,7 +20,7 @@ const STATS_KEY = "crowdle_stats";
 /**
  * Get the storage key for a specific date
  */
-function getGameKey(date: string): string {
+function getGameKey(date: XsdDate): string {
   return STORAGE_KEY_PREFIX + date;
 }
 
@@ -37,7 +39,7 @@ export function saveGameState(gameState: GameState): void {
 /**
  * Get game state for a specific date
  */
-export function getGameState(date: string): GameState | null {
+export function getGameState(date: XsdDate): GameState | null {
   try {
     const key = getGameKey(date);
     const stored = localStorage.getItem(key);
@@ -64,7 +66,7 @@ export function getAllGameStates(): GameState[] {
       }
     }
     return states.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      (a, b) => fromXsdDate(a.date).getTime() - fromXsdDate(b.date).getTime()
     );
   } catch (error) {
     console.error("Failed to get all game states:", error);
@@ -101,15 +103,15 @@ export function getGameStats(): GameStats {
  */
 export function getGameStatesFromLastDays(days: number): GameState[] {
   const allStates = getAllGameStates();
-  const cutoffDate = new Date();
-  cutoffDate.setDate(cutoffDate.getDate() - days);
+  const today = new Date();
+  today.setDate(today.getDate() - days);
 
-  return allStates.filter((state) => new Date(state.date) >= cutoffDate);
+  return allStates.filter((state) => fromXsdDate(state.date) >= today);
 }
 
 /**
  * Check if a game was missed (not played) on a given date
  */
-export function isMissedGame(date: string): boolean {
+export function isMissedGame(date: XsdDate): boolean {
   return getGameState(date) === null;
 }

@@ -5,6 +5,7 @@ import {
   getGameStatesFromLastDays,
   isMissedGame,
 } from "../utils/gameStorage";
+import { fromXsdDate, toXsdDate, type XsdDate } from "../utils/isoDateHelper";
 import Modal from "./Modal";
 import ResultActions from "./ResultActions";
 import ShareButton from "./ShareButton";
@@ -14,7 +15,7 @@ interface GameFinishedProps {
   definition?: string;
   guesses: string[];
   word: string;
-  date: string;
+  date: XsdDate;
   playerWon: boolean;
   gamesWon: number;
   gamesPlayed: number;
@@ -47,7 +48,7 @@ const GameFinished: FC<GameFinishedProps> = ({
     for (let i = 0; i < 7; i++) {
       const checkDate = new Date(today);
       checkDate.setDate(checkDate.getDate() - i);
-      const dateStr = checkDate.toISOString().split("T")[0] + "Z";
+      const dateStr = toXsdDate(checkDate);
 
       // Don't count today if it's still in progress
       if (dateStr === date) continue;
@@ -131,9 +132,7 @@ const GameFinished: FC<GameFinishedProps> = ({
                 {pastGames.map((game) => (
                   <div key={game.date} className="past-game-item">
                     <div className="past-game-date">
-                      {new Date(
-                        game.date.replace(/-/g, "/").replace("Z", "")
-                      ).toLocaleDateString("nl-NL", {
+                      {fromXsdDate(game.date).toLocaleDateString("nl-NL", {
                         weekday: "short",
                         month: "short",
                         day: "numeric",
@@ -155,9 +154,7 @@ const GameFinished: FC<GameFinishedProps> = ({
                 {missedDates.map((missedDate) => (
                   <div key={missedDate} className="past-game-item missed">
                     <div className="past-game-date">
-                      {new Date(
-                        missedDate.replace(/-/g, "/").replace("Z", "")
-                      ).toLocaleDateString("nl-NL", {
+                      {fromXsdDate(missedDate).toLocaleDateString("nl-NL", {
                         weekday: "short",
                         month: "short",
                         day: "numeric",

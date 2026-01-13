@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type JSX } from "react";
 import GameExplanation from "./components/GameExplanation.tsx";
 import type { WordData } from "./components/WordleGame.tsx";
 import WordleGame from "./components/WordleGame.tsx";
+import { toXsdDate, type XsdDate } from "./utils/isoDateHelper.ts";
 
 function App(): JSX.Element {
   const [wordData, setWordData] = useState<WordData | null>(null);
@@ -13,7 +14,7 @@ function App(): JSX.Element {
     fetchWordOfTheDay();
   }, []);
 
-  const getDate = (): string => {
+  const getDate = (): XsdDate => {
     const paramsString = window.location.search;
     const searchParams = new URLSearchParams(paramsString);
     const queryDate = searchParams.get("date");
@@ -22,7 +23,7 @@ function App(): JSX.Element {
       return queryDate + (queryDate.includes("Z") ? "" : "Z");
 
     const today = new Date();
-    return today.toISOString().split("T")[0] + "Z";
+    return toXsdDate(today);
   };
 
   const fetchWordOfTheDay = async (): Promise<void> => {
