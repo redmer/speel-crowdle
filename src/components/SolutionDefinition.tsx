@@ -7,7 +7,7 @@ interface ResultActionsProps {
   word: string;
 }
 
-const ResultActions: FC<ResultActionsProps> = ({
+const SolutionDefinition: FC<ResultActionsProps> = ({
   termId,
   definition,
   word,
@@ -55,4 +55,4 @@ const ResultActions: FC<ResultActionsProps> = ({
   );
 };
 
-export default ResultActions;
+export default SolutionDefinition;

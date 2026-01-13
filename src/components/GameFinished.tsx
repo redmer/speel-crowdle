@@ -7,8 +7,8 @@ import {
 } from "../utils/gameStorage";
 import { fromXsdDate, toXsdDate, type XsdDate } from "../utils/isoDateHelper";
 import Modal from "./Modal";
-import ResultActions from "./ResultActions";
 import ShareButton from "./ShareButton";
+import SolutionDefinition from "./SolutionDefinition";
 
 interface GameFinishedProps {
   termId: string;
@@ -80,7 +80,11 @@ const GameFinished: FC<GameFinishedProps> = ({
           )}
         </div>
 
-        <ResultActions termId={termId} definition={definition} word={word} />
+        <SolutionDefinition
+          termId={termId}
+          definition={definition}
+          word={word}
+        />
 
         <div className="share-box">
           <ShareButton

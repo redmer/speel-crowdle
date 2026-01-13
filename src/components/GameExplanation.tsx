@@ -79,7 +79,7 @@ const GameExplanation: FC<GameExplanationProps> = ({
       </div>
 
       <button className="start-button" autoFocus onClick={onStart}>
-        Spelen →
+        Speel →
       </button>
     </Modal>
   );
