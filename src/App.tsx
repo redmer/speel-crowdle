@@ -1,7 +1,9 @@
 import { useEffect, useState, type JSX } from "react";
 import GameExplanation from "./components/GameExplanation.tsx";
-import type { WordData } from "./components/WordleGame.tsx";
+import GameFinished from "./components/GameFinished.tsx";
+import type { GameFinishData, WordData } from "./components/WordleGame.tsx";
 import WordleGame from "./components/WordleGame.tsx";
+import { getGameState } from "./utils/gameStorage.ts";
 import { toXsdDate, type XsdDate } from "./utils/isoDateHelper.ts";
 
 function App(): JSX.Element {
@@ -9,6 +11,9 @@ function App(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showExplanation, setShowExplanation] = useState(true);
+  const [gameFinishData, setGameFinishData] = useState<GameFinishData | null>(
+    null
+  );
 
   useEffect(() => {
     fetchWordOfTheDay();
@@ -24,6 +29,12 @@ function App(): JSX.Element {
 
     const today = new Date();
     return toXsdDate(today);
+  };
+
+  const shouldSkipExplanation = (): boolean => {
+    const dateString = getDate();
+    const savedGame = getGameState(dateString);
+    return savedGame !== null && savedGame.finished;
   };
 
   const fetchWordOfTheDay = async (): Promise<void> => {
@@ -60,7 +71,7 @@ function App(): JSX.Element {
 
   const appTitle = `CROWdle`;
   const appDesc = `Raad dagelijks het CROW-begrip van de dag – binnen zes pogingen.`;
-  if (showExplanation) {
+  if (showExplanation && !shouldSkipExplanation()) {
     return (
       <div className="container">
         <GameExplanation
@@ -98,7 +109,29 @@ function App(): JSX.Element {
 
   return (
     <div className="container">
-      {wordData && <WordleGame wordData={wordData} />}
+      {wordData && (
+        <WordleGame
+          wordData={wordData}
+          onGameFinish={(data: GameFinishData) => {
+            console.log(data);
+            setGameFinishData(data);
+          }}
+        />
+      )}
+
+      {wordData && gameFinishData && (
+        <GameFinished
+          termId={wordData.term_id}
+          definition={wordData.definition}
+          guesses={gameFinishData.guesses}
+          word={wordData.answer.toLowerCase()}
+          date={wordData.for_date}
+          playerWon={gameFinishData.playerWon}
+          gamesWon={gameFinishData.gamesWon}
+          gamesPlayed={gameFinishData.gamesPlayed}
+          onClose={() => setGameFinishData(null)}
+        />
+      )}
     </div>
   );
 }

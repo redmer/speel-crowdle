@@ -21,6 +21,7 @@ const ResultActions: FC<ResultActionsProps> = ({
             const animationDelay = `${i * 0.2}s`;
             return (
               <LetterBox
+                key={i}
                 letter={letter}
                 state="correct"
                 animationDelay={animationDelay}

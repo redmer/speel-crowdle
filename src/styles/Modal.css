@@ -77,7 +77,7 @@
 
 @media (width <= 600px) {
   .modal-overlay {
-    position: unset;
+    position: sticky;
   }
   .modal-content {
     width: 100%;

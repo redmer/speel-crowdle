@@ -8,7 +8,6 @@ import {
 } from "../utils/gameStorage";
 import type { XsdDate } from "../utils/isoDateHelper";
 import { loadWordList } from "../utils/wordValidation";
-import GameFinished from "./GameFinished";
 import LetterBox from "./LetterBox";
 import VirtualKeyboard from "./VirtualKeyboard";
 
@@ -21,27 +20,33 @@ export interface WordData {
   for_date: XsdDate;
 }
 
+export interface GameFinishData {
+  guesses: string[];
+  playerWon: boolean;
+  gamesWon: number;
+  gamesPlayed: number;
+}
+
 interface WordleGameProps {
   wordData: WordData;
+  onGameFinish: (data: GameFinishData) => void;
 }
 
 type LetterState = "correct" | "present" | "absent";
 type LetterStates = Record<string, LetterState>;
 
-const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
+const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
   const INITIAL_GUESSES = 6;
   const TRUE_MAX_GUESSES = 7;
 
   const [guesses, setGuesses] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState<string>("");
   const [gameIsFinished, setGameIsFinished] = useState<boolean>(false);
-  const [playerWon, setPlayerWon] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [letterStates, setLetterStates] = useState<LetterStates>({});
   const [currentMaxGuesses, setMaxGuesses] = useState<number>(INITIAL_GUESSES);
   const [gamesWon, setGamesWon] = useState<number>(0);
   const [gamesPlayed, setGamesPlayed] = useState<number>(0);
-  const [showGameFinished, setShowGameFinished] = useState<boolean>(false);
   const [validWords, setValidWords] = useState<Set<string> | null>(null);
   const [isInvalidGuess, setIsInvalidGuess] = useState<boolean>(false);
 
@@ -59,10 +64,12 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
     if (savedGame) {
       setGuesses(savedGame.guesses);
       setGameIsFinished(savedGame.finished);
-      setPlayerWon(savedGame.won);
-      if (savedGame.finished) {
-        setShowGameFinished(true);
-      }
+      onGameFinish({
+        gamesPlayed: stats.gamesPlayed,
+        gamesWon: stats.gamesWon,
+        playerWon: savedGame.won,
+        guesses: savedGame.guesses,
+      });
     }
 
     // Load the word list for validation
@@ -209,7 +216,6 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
     if (newGuess === word) {
       setTimeout(() => {
         setGameIsFinished(true);
-        setPlayerWon(true);
         setMessage("🎉 Gewonnen!");
 
         // Save game state and update stats
@@ -228,7 +234,12 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
         saveGameStats(newStats);
         setGamesWon(newStats.gamesWon);
         setGamesPlayed(newStats.gamesPlayed);
-        setShowGameFinished(true);
+        onGameFinish({
+          guesses: newGuesses,
+          playerWon: true,
+          gamesWon: newStats.gamesWon,
+          gamesPlayed: newStats.gamesPlayed,
+        });
       }, totalAnimationTime);
     } else if (newGuesses.length >= TRUE_MAX_GUESSES) {
       setTimeout(() => {
@@ -247,7 +258,12 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
         });
         saveGameStats(newStats);
         setGamesPlayed(newStats.gamesPlayed);
-        setShowGameFinished(true);
+        onGameFinish({
+          guesses: newGuesses,
+          playerWon: false,
+          gamesWon: gamesWon,
+          gamesPlayed: newStats.gamesPlayed,
+        });
       }, totalAnimationTime);
     } else if (newGuesses.length >= INITIAL_GUESSES) {
       setTimeout(() => {
@@ -299,20 +315,6 @@ const WordleGame: FC<WordleGameProps> = ({ wordData }) => {
           className="message"
           dangerouslySetInnerHTML={{ __html: message }}
         ></p>
-      )}
-
-      {gameIsFinished && showGameFinished && (
-        <GameFinished
-          termId={wordData.term_id}
-          definition={wordData.definition}
-          guesses={guesses}
-          word={word}
-          date={wordData.for_date}
-          playerWon={playerWon}
-          gamesWon={gamesWon}
-          gamesPlayed={gamesPlayed}
-          onClose={() => setShowGameFinished(false)}
-        />
       )}
 
       {!gameIsFinished && (
