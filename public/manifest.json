@@ -4,7 +4,7 @@
   "description": "Raad dagelijks het CROW-begrip van de dag – binnen zes pogingen",
   "start_url": "/speel-crowdle/",
   "scope": "/speel-crowdle/",
-  "display": "standalone",
+  "display": "minimal-ui",
   "orientation": "portrait-primary",
   "theme_color": "#009adc",
   "background_color": "#2e3b6a",
