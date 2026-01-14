@@ -8,6 +8,8 @@ import {
 } from "../utils/gameStorage";
 import type { XsdDate } from "../utils/isoDateHelper";
 import { loadWordList } from "../utils/wordValidation";
+import GameExplanation from "./GameExplanation";
+import GameFinished from "./GameFinished";
 import LetterBox from "./LetterBox";
 import VirtualKeyboard from "./VirtualKeyboard";
 
@@ -49,6 +51,9 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
   const [gamesPlayed, setGamesPlayed] = useState<number>(0);
   const [validWords, setValidWords] = useState<Set<string> | null>(null);
   const [isInvalidGuess, setIsInvalidGuess] = useState<boolean>(false);
+  const [showExplanation, setShowExplanation] = useState<boolean>(false);
+  const [showFinished, setShowFinished] = useState<boolean>(false);
+  const [playerWon, setPlayerWon] = useState<boolean>(false);
 
   const word = wordData.answer.toLowerCase();
   const dateKey = wordData.for_date;
@@ -63,6 +68,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
     const savedGame = getGameState(dateKey);
     if (savedGame) {
       setGuesses(savedGame.guesses);
+      setPlayerWon(true);
       setGameIsFinished(savedGame.finished);
       setMessage("🎉 Gewonnen!");
 
@@ -218,6 +224,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
     if (newGuess === word) {
       setTimeout(() => {
         setGameIsFinished(true);
+        setPlayerWon(true);
         setMessage("🎉 Gewonnen!");
 
         // Save game state and update stats
@@ -283,6 +290,28 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
 
   return (
     <div className="wordle-container">
+      <div className="topbar">
+        <h1 className="game-title">CROWdle</h1>
+        <div className="topbar-buttons">
+          <button
+            className="topbar-button help-button"
+            onClick={() => setShowExplanation(true)}
+            title="Help"
+          >
+            ❓
+          </button>
+          {playerWon && (
+            <button
+              className="topbar-button finished-button"
+              onClick={() => setShowFinished(true)}
+              title="Resultaten"
+            >
+              📊
+            </button>
+          )}
+        </div>
+      </div>
+
       <div className="guesses">
         {Array.from({ length: currentMaxGuesses }).map((_, i) => (
           <div key={i} className="guess-row">
@@ -326,6 +355,28 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
           onBackspaceClick={handleBackspaceClick}
           onSubmitGuess={handleSubmitGuess}
           disabled={gameIsFinished}
+        />
+      )}
+
+      {showExplanation && (
+        <GameExplanation
+          title="Crowdle"
+          description="Raad het begrip in 6 pogingen. De kleur van de tegels verandert na elke gok."
+          onStart={() => setShowExplanation(false)}
+        />
+      )}
+
+      {showFinished && (
+        <GameFinished
+          termId={wordData.term_id}
+          definition={wordData.definition}
+          guesses={guesses}
+          word={word}
+          date={dateKey}
+          playerWon={playerWon}
+          gamesWon={gamesWon}
+          gamesPlayed={gamesPlayed}
+          onClose={() => setShowFinished(false)}
         />
       )}
     </div>

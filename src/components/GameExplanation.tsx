@@ -15,7 +15,11 @@ const GameExplanation: FC<GameExplanationProps> = ({
   description,
 }) => {
   return (
-    <Modal title={`Hoe speel je ${title}?`}>
+    <Modal
+      title={`Hoe speel je ${title}?`}
+      showCloseButton={true}
+      onClose={onStart}
+    >
       <div className="explanation-content">
         <p className="intro">{description}</p>
 
