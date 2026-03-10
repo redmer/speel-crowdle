@@ -73,11 +73,6 @@ const GameExplanation: FC<GameExplanationProps> = ({
                 </div>
               </div>
             </li>
-
-            <li>
-              Als je het na zes pogingen niet hebt, krijg je nog één extra kans
-              – met mogelijk een hint!
-            </li>
           </ul>
         </div>
       </div>

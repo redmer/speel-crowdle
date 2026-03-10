@@ -70,7 +70,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
       setGuesses(savedGame.guesses);
       setPlayerWon(true);
       setGameIsFinished(savedGame.finished);
-      setMessage("🎉 Gewonnen!");
+      setMessage("");
 
       onGameFinish({
         gamesPlayed: stats.gamesPlayed,
@@ -116,7 +116,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
   const getLetterState = (
     letter: string,
     position: number,
-    guessWord: string
+    guessWord: string,
   ): LetterState => {
     // Correct position
     if (word[position] === letter) {
@@ -226,6 +226,9 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
         setGameIsFinished(true);
         setPlayerWon(true);
         setMessage("🎉 Gewonnen!");
+        setTimeout(() => {
+          setMessage("");
+        }, 2000);
 
         // Save game state and update stats
         const newStats = {
@@ -279,7 +282,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
         setMessage(
           `Ai, dat was je laatste kans! Goed, nog één poging dan… 
           ${wordData.answer_hint ? "hint: " + wordData.answer_hint + "." : ""}
-          `
+          `,
         );
         setMaxGuesses(TRUE_MAX_GUESSES);
       }, totalAnimationTime);
@@ -322,8 +325,8 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
               const state = guesses[i]
                 ? getLetterState(guesses[i][j], j, guesses[i])
                 : isInvalidGuess && i === guesses.length
-                ? "invalid"
-                : "";
+                  ? "invalid"
+                  : "";
               const isRevealed = !!guesses[i];
               const animationDelay = isRevealed ? `${j * 0.2}s` : "0s";
 
