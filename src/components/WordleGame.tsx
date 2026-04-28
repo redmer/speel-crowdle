@@ -85,8 +85,8 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
   }, [dateKey, word.length]);
 
   const transformToLigature = (input: string): string => {
-    // Replace consecutive i+j with the IJ ligature
-    return input.toLowerCase().replace(/ij/g, "Ĳ");
+    // Replace consecutive i+j with the lowercase IJ ligature
+    return input.toLowerCase().replace(/ij/g, "ĳ");
   };
 
   useEffect(() => {
@@ -100,7 +100,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
       } else if (/^[a-zñ]$/i.test(e.key)) {
         if (currentGuess.length <= word.length) {
           const newGuess = currentGuess + e.key.toLowerCase();
-          // Transform ij to Ĳ
+          // Transform ij to ĳ
           const transformed = transformToLigature(newGuess);
           if (transformed.length <= word.length) {
             setCurrentGuess(transformed);
@@ -206,13 +206,17 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
     for (let i = 0; i < newGuess.length; i++) {
       const letter = newGuess[i];
       const state = getLetterState(letter, i, newGuess);
-      if (state === "correct") {
-        newLetterStates[letter] = "correct";
-      } else if (state === "present" && newLetterStates[letter] !== "correct") {
-        newLetterStates[letter] = "present";
-      } else if (state === "absent" && !newLetterStates[letter]) {
-        newLetterStates[letter] = "absent";
-      }
+      
+      const lettersToUpdate = letter === "ĳ" ? ["ĳ", "i", "j"] : [letter];
+      lettersToUpdate.forEach((l) => {
+        if (state === "correct") {
+          newLetterStates[l] = "correct";
+        } else if (state === "present" && newLetterStates[l] !== "correct") {
+          newLetterStates[l] = "present";
+        } else if (state === "absent" && !newLetterStates[l]) {
+          newLetterStates[l] = "absent";
+        }
+      });
     }
     setLetterStates(newLetterStates);
 
