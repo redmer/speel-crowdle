@@ -206,7 +206,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
     for (let i = 0; i < newGuess.length; i++) {
       const letter = newGuess[i];
       const state = getLetterState(letter, i, newGuess);
-      
+
       const lettersToUpdate = letter === "ĳ" ? ["ĳ", "i", "j"] : [letter];
       lettersToUpdate.forEach((l) => {
         if (state === "correct") {
