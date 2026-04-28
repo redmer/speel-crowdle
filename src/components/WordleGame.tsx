@@ -7,7 +7,7 @@ import {
   saveGameStats,
 } from "../utils/gameStorage";
 import type { XsdDate } from "../utils/isoDateHelper";
-import { loadWordList } from "../utils/wordValidation";
+import { isValidWord, loadWordList } from "../utils/wordValidation";
 import GameExplanation from "./GameExplanation";
 import GameFinished from "./GameFinished";
 import LetterBox from "./LetterBox";
@@ -49,7 +49,6 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
   const [currentMaxGuesses, setMaxGuesses] = useState<number>(INITIAL_GUESSES);
   const [gamesWon, setGamesWon] = useState<number>(0);
   const [gamesPlayed, setGamesPlayed] = useState<number>(0);
-  const [validWords, setValidWords] = useState<Set<string> | null>(null);
   const [isInvalidGuess, setIsInvalidGuess] = useState<boolean>(false);
   const [showExplanation, setShowExplanation] = useState<boolean>(false);
   const [showFinished, setShowFinished] = useState<boolean>(false);
@@ -81,7 +80,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
     }
 
     // Load the word list for validation
-    loadWordList(word.length).then(setValidWords);
+    loadWordList(word.length);
   }, [dateKey, word.length]);
 
   const transformToLigature = (input: string): string => {
@@ -179,7 +178,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
     setCurrentGuess((prev) => prev.slice(0, -1));
   };
 
-  const handleSubmitGuess = (): void => {
+  const handleSubmitGuess = async (): Promise<void> => {
     if (currentGuess.length !== word.length) {
       setMessage(`Woord moet ${word.length} letters lang zijn`);
       setTimeout(() => setMessage(""), 2000);
@@ -187,7 +186,8 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
     }
 
     // Check if the word is valid
-    if (!validWords || !validWords.has(currentGuess.toLowerCase())) {
+    const isValid = await isValidWord(currentGuess);
+    if (!isValid) {
       setIsInvalidGuess(true);
       setMessage("Woord niet herkend");
       setTimeout(() => {
