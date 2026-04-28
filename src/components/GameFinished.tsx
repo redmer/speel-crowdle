@@ -127,7 +127,7 @@ const GameFinished: FC<GameFinishedProps> = ({
               className="toggle-past-games"
               onClick={() => setShowPastGames(!showPastGames)}
             >
-              {showPastGames ? "▼" : "▶"} Eerdere spellen (
+              {showPastGames ? "▼" : "▶"} Afgelopen week (
               {pastGames.length + missedDates.length})
             </button>
 

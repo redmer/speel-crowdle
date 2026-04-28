@@ -260,7 +260,10 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
     } else if (newGuesses.length >= TRUE_MAX_GUESSES) {
       setTimeout(() => {
         setGameIsFinished(true);
-        setMessage(`Game Over! Het woord was: ${word}`);
+        setMessage(`Morgen een nieuwe kans!`);
+        setTimeout(() => {
+          setMessage("");
+        }, 2000);
 
         // Save game state and update stats
         const newStats = { gamesWon: gamesWon, gamesPlayed: gamesPlayed + 1 };
@@ -289,6 +292,9 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
           `,
         );
         setMaxGuesses(TRUE_MAX_GUESSES);
+        setTimeout(() => {
+          setMessage("");
+        }, 5000);
       }, totalAnimationTime);
     }
 
