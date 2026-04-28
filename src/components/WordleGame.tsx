@@ -372,11 +372,7 @@ const WordleGame: FC<WordleGameProps> = ({ wordData, onGameFinish }) => {
       )}
 
       {showExplanation && (
-        <GameExplanation
-          title="Crowdle"
-          description="Raad het begrip in 6 pogingen. De kleur van de tegels verandert na elke gok."
-          onStart={() => setShowExplanation(false)}
-        />
+        <GameExplanation onStart={() => setShowExplanation(false)} />
       )}
 
       {showFinished && (

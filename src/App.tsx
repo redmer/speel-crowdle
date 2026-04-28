@@ -12,7 +12,7 @@ function App(): JSX.Element {
   const [error, setError] = useState<string | null>(null);
   const [showExplanation, setShowExplanation] = useState(true);
   const [gameFinishData, setGameFinishData] = useState<GameFinishData | null>(
-    null
+    null,
   );
 
   useEffect(() => {
@@ -74,11 +74,7 @@ function App(): JSX.Element {
   if (showExplanation && !shouldSkipExplanation()) {
     return (
       <div className="container">
-        <GameExplanation
-          onStart={() => setShowExplanation(false)}
-          title={appTitle}
-          description={appDesc}
-        />
+        <GameExplanation onStart={() => setShowExplanation(false)} />
       </div>
     );
   }

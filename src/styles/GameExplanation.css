@@ -14,6 +14,11 @@
 
 .rules-section {
   margin-bottom: 28px;
+
+  .letter-box {
+    min-width: 40px;
+    min-height: 40px;
+  }
 }
 
 .rules-section h2 {
