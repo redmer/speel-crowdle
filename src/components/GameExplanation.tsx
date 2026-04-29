@@ -80,6 +80,21 @@ const GameExplanation: FC<GameExplanationProps> = ({ onStart }) => {
             </div>
           </div>
         </div>
+
+        <details>
+          <summary>Recente wijzigingen</summary>
+          <ul>
+            <li>
+              <strong>29 apr 2026</strong>: De lijst van valide woorden is sterk
+              uitgebreid: spellingsvarianten met trema's of koppeltekens zijn nu
+              ook toegestaan. Dat scheelt ook mij in enige raad-frustratie.
+            </li>
+            <li>
+              <strong>28 apr 2026</strong>: Als een woord van de dag eindigde op
+              IJ, kon dat woord nooit geraden worden. Dat is gefixt.
+            </li>
+          </ul>
+        </details>
       </div>
 
       <button className="start-button" autoFocus onClick={onStart}>
