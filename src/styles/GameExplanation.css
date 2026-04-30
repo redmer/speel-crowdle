@@ -45,6 +45,15 @@ details {
   line-height: 1.6; */
 }
 
+.rules-section {
+  .guess-row {
+    justify-content: left;
+  }
+  .letter-box {
+    max-width: 50px;
+  }
+}
+
 .rules-section li {
   margin-bottom: 8px;
 }
