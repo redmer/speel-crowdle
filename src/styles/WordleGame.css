@@ -61,27 +61,24 @@
 }
 
 .guess-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-  gap: 8px;
-  justify-content: center;
-
   display: flex;
   gap: 8px;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: nowrap;
+  width: 100%;
 }
 
 .letter-box {
-  min-width: 50px;
-  min-height: 50px;
+  flex: 1;
+  max-width: 60px;
+  min-width: 0; /* Allows shrinking below 50px */
   padding: 0.3rem;
   aspect-ratio: 1/1;
   border: 2px solid #e0e0e0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
+  font-size: clamp(1rem, 5vw, 1.4rem); /* Responsive font size */
   font-weight: bold;
   border-radius: 6px;
   transition: all 0.3s ease;
