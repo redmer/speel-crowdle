@@ -1,5 +1,5 @@
-// Cache for loaded word lists
-const wordListCache: Record<number, Set<string>> = {};
+// Cache for loaded word lists (promises to avoid duplicate fetches)
+const wordListCache: Record<number, Promise<Set<string>>> = {};
 
 /**
  * Load the allowed words list for a given word length
@@ -7,31 +7,33 @@ const wordListCache: Record<number, Set<string>> = {};
  * @returns A Set of valid words for that length
  */
 export const loadWordList = async (length: number): Promise<Set<string>> => {
-  // Return from cache if already loaded
-  if (wordListCache[length]) {
+  // Return from cache if already loading or loaded
+  if (await wordListCache[length]) {
     return wordListCache[length];
   }
 
-  try {
-    const response = await fetch(`allowed-${length}.txt`);
-    if (!response.ok) {
-      console.error(`Failed to load word list for length ${length}`);
-      return new Set();
+  wordListCache[length] = (async () => {
+    try {
+      const response = await fetch(`allowed-${length}.txt`);
+      if (!response.ok) {
+        console.error(`Failed to load word list for length ${length}`);
+        return new Set<string>();
+      }
+
+      const text = await response.text();
+      const words = text
+        .split("\n")
+        .map((word) => word.trim().toLowerCase())
+        .filter((word) => word.length > 0);
+
+      return new Set(words);
+    } catch (error) {
+      console.error(`Error loading word list for length ${length}:`, error);
+      return new Set<string>();
     }
+  })();
 
-    const text = await response.text();
-    const words = text
-      .split("\n")
-      .map((word) => word.trim().toLowerCase())
-      .filter((word) => word.length > 0);
-
-    const wordSet = new Set(words);
-    wordListCache[length] = wordSet;
-    return wordSet;
-  } catch (error) {
-    console.error(`Error loading word list for length ${length}:`, error);
-    return new Set();
-  }
+  return wordListCache[length];
 };
 
 /**
@@ -50,6 +52,16 @@ export const isValidWord = async (word: string): Promise<boolean> => {
     console.log(`Guess ${word.toUpperCase()}: in word list`);
     return true;
   }
+
+  // Pre-load all necessary word lists concurrently to speed up checks
+  const requiredLengths = new Set<number>();
+  for (let i = 1; i < wordLength; i++) {
+    requiredLengths.add(i);
+    requiredLengths.add(wordLength - i);
+  }
+  await Promise.all(
+    Array.from(requiredLengths).map((length) => loadWordList(length)),
+  );
 
   // If not found and it's a combinable length (e.g., 2+ characters),
   // check all possible combinations of smaller allowed words
